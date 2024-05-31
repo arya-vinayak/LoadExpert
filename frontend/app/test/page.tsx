@@ -501,7 +501,7 @@ export default function TestBed() {
   );
 }
 
-function GaugeIcon(props) {
+function GaugeIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
       {...props}
@@ -521,7 +521,7 @@ function GaugeIcon(props) {
   );
 }
 
-function HashIcon(props) {
+function HashIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
       {...props}
@@ -543,7 +543,7 @@ function HashIcon(props) {
   );
 }
 
-function ServerIcon(props) {
+function ServerIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
       {...props}
