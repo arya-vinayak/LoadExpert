@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: orchestra
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: orchestra
+  template:
+    metadata:
+      labels:
+        app: orchestra
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8082"
+        prometheus.io/path: "/actuator/prometheus"
+    spec:
+      containers:
+      - name: orchestra
+        image: aryavinayak/orchestra
+        ports:
+        - containerPort: 8082
+        env:
+        - name: KAFKA_BOOTSTRAP_SERVERS
+          value: kafka-service:9092
+        - name: KAFKA_GROUP_ID
+          value: group5
+        # - name: REDIS_HOST
+        #   value: redis
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: orchestra
+  labels:
+    app: orchestra
+spec:
+  selector:
+    app: orchestra
+  ports:
+    - protocol: TCP
+      name: http-traffic
+      port: 8082
+      targetPort: 8082
+
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: orchestra-service-monitor
+  labels:
+    release: prometheus
+spec:
+  selector:
+    matchLabels:
+      app: orchestra
+  endpoints:
+    - interval: 15s
+      port: http-traffic
+      path: "/actuator/prometheus"

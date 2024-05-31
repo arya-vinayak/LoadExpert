@@ -1,0 +1,14 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: orchestra-service-monitor
+  labels:
+    release: prometheus-operator
+spec:
+  selector:
+    matchLabels:
+      app: orchestra
+  endpoints:
+    - interval: 15s
+      port: http-traffic
+      path: "/actuator/prometheus"

@@ -1,0 +1,20 @@
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: tester-scaler
+spec:
+  scaleTargetRef:
+    name: tester
+    kind: Deployment
+  pollingInterval: 15
+  cooldownPeriod: 30
+  idleReplicaCount: 0
+  minReplicaCount: 1
+  maxReplicaCount: 10
+  triggers:
+    - type: prometheus
+      metadata:
+        serverAddress: http://prometheus-kube-prometheus-prometheus.default.svc.cluster.local:9090
+        metricName: desired_tester_nodes
+        threshold: "1"
+        query: desired_tester_nodes
