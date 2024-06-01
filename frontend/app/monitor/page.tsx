@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React, { useEffect, useState } from "react";
 import Breadcrumb from "@/components/BreadCrumb";
 import NodeCard from "@/components/NodeCard";
@@ -15,14 +15,18 @@ export default function Page() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const res = await fetch("http://localhost:8082/trigger/activeNodes", {
-          method: "GET",
-          headers: {
-            "Cache-Control": "no-store",
-          },
-          redirect: "follow",
-          cache: "no-store",
-        });
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_SERVER_URL}/trigger/activeNodes`,
+          {
+            method: "GET",
+            headers: {
+              "Cache-Control": "no-store",
+              "ngrok-skip-browser-warning": "true",
+            },
+            redirect: "follow",
+            cache: "no-store",
+          }
+        );
 
         if (!res.ok) {
           throw new Error("Failed to fetch data");

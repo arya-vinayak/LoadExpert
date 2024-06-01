@@ -50,11 +50,14 @@ export default function TestBed() {
     async function loadActiveNodes() {
       try {
         let activeNodes: ActiveNode[] = [];
-        const res = await fetch("http://localhost:8082/trigger/activeNodes", {
-          method: "GET",
-          redirect: "follow",
-          cache: "no-store",
-        });
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_SERVER_URL}/trigger/activeNodes`,
+          {
+            method: "GET",
+            redirect: "follow",
+            cache: "no-store",
+          }
+        );
 
         if (!res.ok) {
           throw new Error("Failed to fetch data");
@@ -63,7 +66,9 @@ export default function TestBed() {
         const activeNode = await res.json();
         // setActiveNodes(nodes.length);
         //computing the length of the active nodes by filtering the nodes with status as active
-        activeNodes = activeNode.filter((node:ActiveNode) => node.alive === true);
+        activeNodes = activeNode.filter(
+          (node: ActiveNode) => node.alive === true
+        );
         setActiveNodes(activeNodes.length);
       } catch (error) {
         console.error("Failed to fetch data:", error);
@@ -77,6 +82,7 @@ export default function TestBed() {
   const handleActivation = async () => {
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("ngrok-skip-browser-warning", "true")
 
     const raw = JSON.stringify({
       desiredTesterNodeCount: testerNodes,
@@ -87,7 +93,7 @@ export default function TestBed() {
     try {
       // Sending the PUT request
       const putResponse = await fetch(
-        "http://localhost:8082/trigger/desiredCount",
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/trigger/desiredCount`,
         {
           method: "PUT",
           headers: myHeaders,
@@ -117,9 +123,14 @@ export default function TestBed() {
 
   const startHeartbeat = async () => {
     try {
-      const res = await fetch("http://localhost:8082/trigger/start", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/trigger/start`, {
         method: "GET",
+        headers: {
+          "Cache-Control": "no-store",
+          "ngrok-skip-browser-warning": "true",
+        },
         redirect: "follow",
+
       });
 
       if (!res.ok) {
@@ -143,6 +154,7 @@ export default function TestBed() {
   const deactivateNodes = async () => {
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("ngrok-skip-browser-warning", "true");
 
     const raw = JSON.stringify({
       desiredTesterNodeCount: 0,
@@ -150,16 +162,23 @@ export default function TestBed() {
 
     try {
       // Sending the PUT request
-      const putResponse = fetch("http://localhost:8082/trigger/desiredCount", {
-        method: "PUT",
-        headers: myHeaders,
-        body: raw,
-        redirect: "follow",
-      });
+      const putResponse = fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/trigger/desiredCount`,
+        {
+          method: "PUT",
+          headers: myHeaders,
+          body: raw,
+          redirect: "follow",
+        }
+      );
 
       // Sending the GET request
-      const getResponse = fetch("http://localhost:8082/trigger/stop", {
+      const getResponse = fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/trigger/stop`, {
         method: "GET",
+        headers: {
+          "Cache-Control": "no-store",
+          "ngrok-skip-browser-warning": "true",
+        },
         redirect: "follow",
       });
 
@@ -195,6 +214,7 @@ export default function TestBed() {
   const handleTestClick = async () => {
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("ngrok-skip-browser-warning", "true");
 
     const raw = JSON.stringify({
       testId: Math.floor(Math.random() * 1000) + 1,
@@ -217,12 +237,15 @@ export default function TestBed() {
     try {
       console.log(raw);
       setLoading(true);
-      const response = await fetch("http://localhost:8082/trigger/runTest", {
-        method: "POST",
-        headers: myHeaders,
-        body: raw,
-        redirect: "follow",
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/trigger/runTest`,
+        {
+          method: "POST",
+          headers: myHeaders,
+          body: raw,
+          redirect: "follow",
+        }
+      );
 
       toast({
         title: "Test initiated",
