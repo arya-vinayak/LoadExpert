@@ -171,7 +171,7 @@ That's it! You're now ready to start load testing! 🎉
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please follow the [Contributing Guidelines](notion://www.notion.so/CONTRIBUTING.md) to get started.
+Contributions are welcome!
 
 ## 📧 Contact
 
