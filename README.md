@@ -137,6 +137,19 @@ You can host your backend using AWS, Azure, or any cloud platform you prefer. Fo
 kubectl port-forward service/orchestra 8082:8082
 
 ```
+### ⚡ Ngrok Setup (for local development)
+
+If you're running the backend locally using Kubernetes, you can use Ngrok to expose the Orchestrator service to the internet. Follow these steps:
+
+1. Install Ngrok by following the instructions from the official website: https://ngrok.com/download
+2. Run the following command to start Ngrok and expose the Orchestrator service on a custom domain:
+
+```bash
+ngrok http <domain-name> 8082
+
+```
+
+Replace `<domain-name>` with your desired subdomain name.
 
 This sets up your backend completely. 💯
 
